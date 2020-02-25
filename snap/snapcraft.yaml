@@ -1,0 +1,115 @@
+name: lbry
+base: core18
+adopt-info: lbry
+summary: LBRY
+description: |
+  The LBRY app is a graphical browser for the decentralized content marketplace provided by the LBRY protocol. It is essentially the lbry daemon bundled with a UI using Electron.
+  Click here to use my referal code to join lbry: https://lbry.tv/$/invite/qrcixegFCY1v8utP8kNTEQu2ZQKsKvfr
+license: MIT
+grade: stable
+confinement: strict
+
+architectures:
+  - build-on: amd64
+
+plugs:
+  gnome-3-28-1804:
+    interface: content
+    target: $SNAP/gnome-platform
+    default-provider: gnome-3-28-1804
+
+apps:
+  lbrynet:
+    command: opt/LBRY/resources/static/daemon/lbrynet
+    environment:
+      XDG_CURRENT_DESKTOP: Unity
+      TMPDIR: $XDG_RUNTIME_DIR
+      XDG_DATA_HOME: $SNAP_USER_COMMON
+      HOME: $SNAP_USER_COMMON
+    plugs:
+      - network
+      - network-bind
+      - home
+      - removable-media
+  lbry:
+    extensions: [gnome-3-28]
+    command: electron-launch $SNAP/opt/LBRY/lbry
+    environment:
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH"
+      DISABLE_WAYLAND: 1
+      XDG_CURRENT_DESKTOP: Unity
+      TMPDIR: $XDG_RUNTIME_DIR
+      XDG_DATA_HOME: $SNAP_USER_COMMON
+      HOME: $SNAP_USER_COMMON
+      GSETTINGS_SCHEMA_DIR: $SNAP/usr/share/glib-2.0/schemas
+    plugs:
+      - audio-playback
+      - browser-support
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - home
+      - removable-media
+      - network
+      - network-bind
+      - opengl
+      - password-manager-service
+      - unity7
+      - wayland 
+      - x11
+
+parts:
+  wrapper:
+    plugin: dump
+    source: snap/local
+  lbry:
+    plugin: nil
+    override-build: |
+      set -eu
+      ARCHITECTURE=$(dpkg --print-architecture)
+      echo "Get GitHub releases..."
+      wget --quiet https://api.github.com/repos/lbryio/lbry-desktop/releases -O releases.json
+      VERSION=$(jq . releases.json | grep tag_name | cut -d'"' -f4 | sed s'/v//' | head -n 1)
+      DEB_URL=$(grep browser_download releases.json | grep "download/v${VERSION}/" | grep deb | cut -d'"' -f4)
+      DEB=$(basename "${DEB_URL}")
+      echo "Downloading ${DEB_URL}..."
+      wget "${DEB_URL}" -O "${SNAPCRAFT_PART_INSTALL}/${DEB}"
+      echo "Unpacking ${DEB}..."
+      dpkg -x "${SNAPCRAFT_PART_INSTALL}/${DEB}" ${SNAPCRAFT_PART_INSTALL}
+      rm -f releases.json
+      rm -f "${SNAPCRAFT_PART_INSTALL}/${DEB}"
+      snapcraftctl set-version "$VERSION"
+    build-packages:
+      - wget
+      - jq
+    stage-packages:
+      - fcitx-frontend-gtk3
+      - freeglut3
+      - gvfs-libs
+      - libasound2
+      - libappindicator3-1
+      - libgconf-2-4
+      - libglib2.0-bin
+      - libgnome-keyring0
+      - libglu1-mesa
+      - libgtk-3-0
+      - libnotify4
+      - libnspr4
+      - libnss3
+      - libpcre3
+      - libpulse0
+      - libsecret-1-0
+      - libslang2
+      - libxss1
+      - libxtst6
+      - libx11-xcb1
+      - zlib1g
+      - ffmpeg
+  cleanup:
+    after: [ lbry ]
+    plugin: nil
+    build-snaps: [ gnome-3-28-1804 ]
+    override-prime: |
+        set -eux
+        cd /snap/gnome-3-28-1804/current
+        find . -type f,l -exec rm -f $SNAPCRAFT_PRIME/{} \;

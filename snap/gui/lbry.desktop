@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=LBRY
+Exec=lbry %U
+Terminal=false
+Type=Application
+Icon=${SNAP}/meta/gui/lbry.png
+StartupWMClass=LBRY
+MimeType=x-scheme-handler/lbry;
+Comment=A browser for the LBRY network, a digital marketplace controlled by its users.
+Categories=AudioVideo;Video;
