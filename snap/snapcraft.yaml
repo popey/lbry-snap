@@ -19,18 +19,18 @@ plugs:
     default-provider: gnome-3-28-1804
 
 apps:
-  lbrynet:
-    command: opt/LBRY/resources/static/daemon/lbrynet
-    environment:
-      XDG_CURRENT_DESKTOP: Unity
-      TMPDIR: $XDG_RUNTIME_DIR
-      XDG_DATA_HOME: $SNAP_USER_COMMON
-      HOME: $SNAP_USER_COMMON
-    plugs:
-      - network
-      - network-bind
-      - home
-      - removable-media
+  # lbrynet:
+  #   command: electron-launch $SNAP/opt/LBRY/resources/static/daemon/lbrynet
+  #   environment:
+  #     XDG_CURRENT_DESKTOP: Unity
+  #     TMPDIR: $XDG_RUNTIME_DIR
+  #     XDG_DATA_HOME: $SNAP_USER_COMMON
+  #     HOME: $SNAP_USER_COMMON
+  #   plugs:
+  #     - network
+  #     - network-bind
+  #     - home
+  #     - removable-media
   lbry:
     extensions: [gnome-3-28]
     command: electron-launch $SNAP/opt/LBRY/lbry
@@ -59,9 +59,6 @@ apps:
       - x11
 
 parts:
-  build-trigger:
-    plugin: nil
-    source: https://github.com/lbryio/lbry-desktop.git
   wrapper:
     plugin: dump
     source: snap/local
@@ -72,7 +69,8 @@ parts:
       ARCHITECTURE=$(dpkg --print-architecture)
       echo "Get GitHub releases..."
       wget --quiet https://api.github.com/repos/lbryio/lbry-desktop/releases -O releases.json
-      VERSION=$(jq . releases.json | grep tag_name | cut -d'"' -f4 | sed s'/v//' | head -n 1)
+      #VERSION=$(jq . releases.json | grep tag_name | cut -d'"' -f4 | sed s'/v//' | head -n 1)
+      VERSION="0.43.2"
       DEB_URL=$(grep browser_download releases.json | grep "download/v${VERSION}/" | grep deb | cut -d'"' -f4)
       DEB=$(basename "${DEB_URL}")
       echo "Downloading ${DEB_URL}..."
@@ -107,6 +105,7 @@ parts:
       - libxtst6
       - libx11-xcb1
       - zlib1g
+      - yad
       - ffmpeg
   cleanup:
     after: [ lbry ]
