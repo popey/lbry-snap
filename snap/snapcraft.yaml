@@ -59,6 +59,9 @@ apps:
       - x11
 
 parts:
+  build-trigger:
+    plugin: nil
+    source: https://github.com/lbryio/lbry-desktop.git
   wrapper:
     plugin: dump
     source: snap/local
