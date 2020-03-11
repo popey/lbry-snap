@@ -62,6 +62,9 @@ parts:
   wrapper:
     plugin: dump
     source: snap/local
+  build-trigger:
+    source: https://github.com/lbryio/lbry-desktop.git
+    plugin: nil
   lbry:
     plugin: nil
     override-build: |
