@@ -19,18 +19,6 @@ plugs:
     default-provider: gnome-3-28-1804
 
 apps:
-  # lbrynet:
-  #   command: electron-launch $SNAP/opt/LBRY/resources/static/daemon/lbrynet
-  #   environment:
-  #     XDG_CURRENT_DESKTOP: Unity
-  #     TMPDIR: $XDG_RUNTIME_DIR
-  #     XDG_DATA_HOME: $SNAP_USER_COMMON
-  #     HOME: $SNAP_USER_COMMON
-  #   plugs:
-  #     - network
-  #     - network-bind
-  #     - home
-  #     - removable-media
   lbry:
     extensions: [gnome-3-28]
     command: electron-launch $SNAP/opt/LBRY/lbry
