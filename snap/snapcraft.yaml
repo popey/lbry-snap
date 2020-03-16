@@ -1,6 +1,7 @@
 name: lbry
 base: core18
-assumes: 2.43
+assumes: 
+  - snapd2.43
 adopt-info: lbry
 summary: LBRY
 description: |
