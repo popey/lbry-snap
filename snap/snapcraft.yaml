@@ -23,7 +23,7 @@ plugs:
 apps:
   lbry:
     extensions: [gnome-3-28]
-    command: bin/snapcraft-preload $SNAP/bin/electron-launch $SNAP/opt/LBRY/lbry
+    command: electron-launch $SNAP/bin/snapcraft-preload $SNAP/opt/LBRY/lbry
     environment:
       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH"
       DISABLE_WAYLAND: 1
