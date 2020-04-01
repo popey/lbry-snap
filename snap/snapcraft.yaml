@@ -23,7 +23,9 @@ plugs:
 apps:
   lbry:
     extensions: [gnome-3-28]
-    command: electron-launch $SNAP/bin/snapcraft-preload $SNAP/opt/LBRY/lbry
+    command-chain:
+      - sem-open-preload-launch
+    command: electron-launch $SNAP/opt/LBRY/lbry
     environment:
       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH"
       DISABLE_WAYLAND: 1
@@ -49,13 +51,9 @@ apps:
       - x11
 
 parts:
-  snapcraft-preload:
-    source: https://github.com/sergiusens/snapcraft-preload.git
-    plugin: cmake
-    build-packages:
-      - on amd64:
-        - gcc-multilib
-        - g++-multilib
+  sem-open-preload:
+    source: https://github.com/sergiusens/sem-open-preload
+    plugin: make
   wrapper:
     plugin: dump
     source: snap/local
