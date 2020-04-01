@@ -52,7 +52,7 @@ apps:
 
 parts:
   sem-open-preload:
-    source: https://github.com/sergiusens/sem-open-preload
+    source: https://github.com/sergiusens/sem-open-preload.git
     plugin: make
   wrapper:
     plugin: dump
