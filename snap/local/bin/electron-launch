@@ -39,35 +39,4 @@ if [ ! -f $SNAP_USER_DATA/.local/share/lbry/lbrynet/daemon_settings.yml ]; then
 	echo "wallet_dir: $SNAP_USER_COMMON/" >> $SNAP_USER_DATA/.local/share/lbry/lbrynet/daemon_settings.yml
 fi
 
-# See if the password-manager-service is connected, if not, we need to prompt the user to connect it
-if snapctl is-connected password-manager-service; then
-  echo "Password manager service is connected"
-else
-  CONNECTION_TITLE="Unable to use desktop keyring"
-  CONNECTION_TEXT="This snap currently requires access to the desktop keyring to store login credentials.\
-  \\n\\n\
-  Note: the various keyring services do not provide sufficient isolation for snap access to the\\n\
-  interface to be auto-connected by default. Not only can the snap see all stored passwords, but\\n \
-  all other applications with access to the password services can also see the snap’s passwords.\\n\
-  \\n\\n\
-  <b>If you wish to connect the interface, in a terminal run the following command:</b>\
-  \\n\\n\
-  <tt>sudo snap connect lbry:password-manager-service</tt>\\n\
-  \\n\\n\
-  Then come back here and continue or restart the application completely.\
-  If connected, this dialog will no longer appear.\
-  \\n\\n\
-  Visit the following link for more details:\
-  https://forum.snapcraft.io/t/password-manager-service-for-lbry-snap/15644"
-
-  # Display migration alert
-  $SNAP/usr/bin/yad \
-    --title="${CONNECTION_TITLE}" \
-    --text="${CONNECTION_TEXT}" \
-    --center \
-    --on-top \
-    --auto-kill \
-    --fixed
-fi
-
 exec "$@"
