@@ -25,7 +25,7 @@ apps:
     extensions: [gnome-3-28]
     command-chain:
       - sem-open-preload-launch
-    command: electron-launch $SNAP/opt/LBRY/lbry
+    command: electron-launch $SNAP/opt/LBRY/lbry --no-sandbox
     environment:
       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH"
       DISABLE_WAYLAND: 1
@@ -76,6 +76,7 @@ parts:
       dpkg -x "${SNAPCRAFT_PART_INSTALL}/${DEB}" ${SNAPCRAFT_PART_INSTALL}
       rm -f releases.json
       rm -f "${SNAPCRAFT_PART_INSTALL}/${DEB}"
+      rm -f "${SNAPCRAFT_PART_INSTALL}/opt/LBRY/chrome-sandbox"
       snapcraftctl set-version "$VERSION"
     build-packages:
       - wget
