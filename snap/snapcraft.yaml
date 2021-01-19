@@ -27,7 +27,7 @@ apps:
       - sem-open-preload-launch
     command: electron-launch $SNAP/opt/LBRY/lbry --no-sandbox
     environment:
-      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH"
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
       DISABLE_WAYLAND: 1
       XDG_CURRENT_DESKTOP: Unity
       TMPDIR: $XDG_RUNTIME_DIR
